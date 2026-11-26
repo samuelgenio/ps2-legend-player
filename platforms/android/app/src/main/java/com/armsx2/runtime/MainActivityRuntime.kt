@@ -787,6 +787,8 @@ open class MainActivityRuntime : ComponentActivity() {
         }
 
         fun start() {
+            // PS2 Legend: a new boot closes the open play-session entry.
+            com.armsx2.legend.SessionJournal.onBoot()
             // Pre-boot memory card pass. Here rather than after the VM is up because the card file
             // is not open yet, so an unreadable card can still be put back before the game ever
             // mounts it — and once the console has mounted a card it caches its own picture of the
@@ -3088,10 +3090,13 @@ open class MainActivityRuntime : ComponentActivity() {
                 // pause / stop / background. Keyed on the serial too so the session
                 // re-arms once currentGame resolves shortly after launch.
                 androidx.compose.runtime.LaunchedEffect(eState.value, currentGame.value?.serial) {
-                    if (eState.value == EmuState.RUNNING)
+                    if (eState.value == EmuState.RUNNING) {
                         PlayTime.startSession(currentGame.value?.serial)
-                    else
+                        com.armsx2.legend.SessionJournal.spanStart(currentGame.value)
+                    } else {
                         PlayTime.endSession()
+                        com.armsx2.legend.SessionJournal.spanEnd()
+                    }
                 }
                 // Capture achievement progress while the game is loaded. Only the achievements panel
                 // used to do this, so the library showed nothing for anyone who never opened it. The

@@ -326,7 +326,7 @@ android {
     externalNativeBuild {
         cmake {
             path = file("src/main/cpp/CMakeLists.txt")
-            version = "3.31.6"
+            version = providers.gradleProperty("armsx2.cmakeVersion").orElse("3.31.6").get()
         }
     }
     buildFeatures {

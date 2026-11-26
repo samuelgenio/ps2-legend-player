@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- PS2 Legend Player API: only apps signed with the same certificate (the PS2 Legend
+         catalog) may read it. The catalog declares the same permission so install order
+         does not matter. -->
+    <permission
+        android:name="com.asconn.ps2legend.permission.PLAYER_API"
+        android:protectionLevel="signature" />
+
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="archos.permission.FULLSCREEN.FULL" />
@@ -160,6 +167,12 @@
                 <action android:name="${applicationId}.action.CLEAR_RETROACHIEVEMENTS_HOST_OVERRIDE" />
             </intent-filter>
         </receiver>
+
+        <provider
+            android:name="com.armsx2.legend.LegendApiProvider"
+            android:authorities="${applicationId}.legend"
+            android:exported="true"
+            android:readPermission="com.asconn.ps2legend.permission.PLAYER_API" />
 
         <provider
             android:name=".data.library.RecentGamesContentProvider"
