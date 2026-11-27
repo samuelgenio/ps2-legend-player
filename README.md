@@ -1,3 +1,30 @@
+# PS2 Legend Player
+
+**PS2 Legend Player** is the Android PS2 emulator used by the [PS2 Legend](https://play.google.com/store/apps/details?id=com.asconn.ps2legend) catalog app. It is a fork of **[ARMSX2](https://github.com/ARMSX2/ARMSX2)**, itself based on **[PCSX2](https://github.com/PCSX2/pcsx2)**, and is distributed under the same **GNU GPL v3 or later** ([COPYING.GPLv3](COPYING.GPLv3)).
+
+All the emulation work belongs to the ARMSX2 and PCSX2 developers. This fork only adds what the catalog app needs, on the `ps2-legend` branch:
+
+- **Name and package**: "PS2 Legend Player", `com.asconn.ps2legend.player`, so it installs alongside ARMSX2.
+- **Play-session journal**: one entry per game boot, counting only the time the game is actually running (pauses and background time excluded).
+- **Per-game memory cards** on by default; a game's first card starts as a copy of the shared card, so no earlier save is hidden.
+- **Companion API** (`platforms/android/app/src/main/java/com/armsx2/legend/`): a ContentProvider protected by a signature-level permission, so only apps signed with the same certificate can use it. It exposes the sessions, memory cards and save states, and validates restored files.
+
+The Player works on its own; the companion app is optional. **No BIOS or games are included or downloaded**: use files dumped from your own console and discs.
+
+### Building the Android app
+
+Same as ARMSX2 (see `platforms/android/README.md`), for example:
+
+```bash
+cd platforms/android
+python3 app/src/main/cpp/3rdparty/shaderc/utils/git-sync-deps
+./gradlew :app:assemblePlayRelease
+```
+
+Requires NDK 29 and CMake 3.31 (`-Parmsx2.cmakeVersion=<version>` selects another installed CMake).
+
+---
+
 # ARMSX2 — Native ARM64 JIT Fork of PCSX2
 [![All Platforms](https://img.shields.io/github/actions/workflow/status/ARMSX2/ARMSX2/build-all.yml?branch=master&label=All%20Platforms)](https://github.com/ARMSX2/ARMSX2/actions/workflows/build-all.yml)
 
