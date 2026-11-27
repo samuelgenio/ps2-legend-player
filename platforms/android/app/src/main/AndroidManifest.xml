@@ -172,7 +172,7 @@
             android:name="com.armsx2.legend.LegendApiProvider"
             android:authorities="${applicationId}.legend"
             android:exported="true"
-            android:readPermission="com.asconn.ps2legend.permission.PLAYER_API" />
+            android:permission="com.asconn.ps2legend.permission.PLAYER_API" />
 
         <provider
             android:name=".data.library.RecentGamesContentProvider"

@@ -1063,9 +1063,15 @@ open class MainActivityRuntime : ComponentActivity() {
             // per-game) has a non-default filename, so we must NOT clobber it with a
             // blank serial card. (Bug: the old guard compared against the current
             // global, which a global assignment always equals, so it wiped it.)
+            // PS2 Legend: on by default, so each game's saves live in their own card and can be
+            // backed up to the cloud on their own. A game's first card starts as a copy of the
+            // shared card, so switching never hides saves made before.
             currentGame.value?.serial?.takeIf { it.isNotBlank() }?.let { serial ->
-                if (prefs.getBoolean("memcard.perGame", false) &&
+                if (prefs.getBoolean("memcard.perGame", true) &&
                     resolved.system.memoryCardSlot1Filename.equals("mcd001.ps2", ignoreCase = true)) {
+                    instance?.applicationContext?.let { ctx ->
+                        runCatching { com.armsx2.legend.LegendMemcards.seedFromShared(ctx, serial) }
+                    }
                     resolved = resolved.copy(
                         system = resolved.system.copy(
                             memoryCardSlot1Filename = "$serial.ps2",
